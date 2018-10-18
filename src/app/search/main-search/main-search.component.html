@@ -1,0 +1,30 @@
+
+<div class = "center">
+  <mat-form-field>
+    <input required [(ngModel)]="input" matInput placeholder="Name">
+  </mat-form-field>
+  <mat-form-field>
+    <mat-select [(value)] = "selectedSearch" placeholder="Type" >
+      <mat-option value="album">Album</mat-option>
+      <mat-option value="artist">Artist</mat-option>
+      <mat-option value="song">Song</mat-option>
+    </mat-select>
+  </mat-form-field>
+  <button mat-raised-button="Search" (click)="search()">Search</button>
+
+
+<mat-card *ngFor="let result of results">
+  <mat-card-header>
+    <mat-card-title>
+      {{result.name}}
+      <button mat-icon-button class="more-button" [matMenuTriggerFor]="menu" aria-label="Toggle menu">
+        <mat-icon>more_vert</mat-icon>
+      </button>
+      <mat-menu #menu="matMenu" xPosition="before">
+        <button mat-menu-item>Expand</button>
+        <button mat-menu-item>Remove</button>
+      </mat-menu>
+    </mat-card-title>
+  </mat-card-header>
+</mat-card>
+</div>
