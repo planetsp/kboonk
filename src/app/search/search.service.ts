@@ -11,31 +11,15 @@ export class SearchService {
   apikey = '79e11c48618b3efe5764269d595f5baf';
   constructor(private http: HttpClient) { }
   public getArtist(artistName: string): Observable<any> {
-    //let relevantArtists: Array<string> = [];
     return this.http.get(this.configURl + 'artist.search&artist=' + artistName + '&api_key=' +
       this.apikey + '&format=json');
-    // this.queried = artistName;
-    // relevantArtists.push(artistName);
-    // return relevantArtists;
   }
-  public getSong(songName: string) {
-    let relevantSongs: Array<string> = [];
-   return this.http.get(this.configURl + 'artist.search&artist=' + songName + '&api_key=' +
-     this.apikey + '&format=json').subscribe(res => {
-     //console.log(res.results);
-
-   });
-    this.queried = songName;
-    relevantSongs.push(songName);
-    return relevantSongs;
+  public getSong(songName: string): Observable<any> {
+   return this.http.get(this.configURl + 'track.search&track=' + songName + '&api_key=' +
+     this.apikey + '&format=json');
   }
-  public getAlbum(albumName: string) {
-    let relevantAlbums: Array<string> = [];
-    return this.http.get(this.configURl + 'artist.search&artist=' + albumName + '&api_key=' +
-      this.apikey + '&format=json').subscribe(res => {
-          console.log(res);
-    });
-    relevantAlbums.push(albumName);
-    return relevantAlbums;
+  public getAlbum(albumName: string): Observable<any> {
+    return this.http.get(this.configURl + 'album.search&album=' + albumName + '&api_key=' +
+      this.apikey + '&format=json');
   }
 }

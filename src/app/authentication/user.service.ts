@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
 import {Router} from '@angular/router';
 import {AngularFireAuth} from '@angular/fire/auth';
-import {AngularFirestore, AngularFirestoreDocument} from '@angular/fire/firestore';
+import {AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument} from '@angular/fire/firestore';
 import {User} from '../models/user';
 import {Observable} from 'rxjs';
 import 'rxjs/add/operator/switchMap';
 import 'rxjs/add/observable/of';
 import * as firebase from 'firebase/app';
+import {MusicItem} from '../models/musicItem';
 @Injectable({
   providedIn: 'root'
 })
@@ -21,9 +22,34 @@ export class UserService {
       }
     });
   }
-  login(){
+  login() {
     const provider = new firebase.auth.GoogleAuthProvider();
     return this.oAuthLogin(provider);
+  }
+
+  getFavoriteAlbums(user) {
+    return this.afs.collection(`users/${user.uid}/favoriteAlbums/`).valueChanges();
+  }
+  getFavoriteSongs(user) {
+    return this.afs.collection(`users/${user.uid}/favoriteSongs/`).valueChanges();
+  }
+  getFavoriteArtists(user) {
+    return this.afs.collection(`users/${user.uid}/favoriteArtists/`).valueChanges();
+  }
+  addFavoriteAlbums(album: MusicItem, user) {
+    const userRef: AngularFirestoreCollection<Object> = this.afs.collection(`users/${user.uid}/favoriteAlbums/`);
+    console.log('added' + album.album);
+    return userRef.add(album as object);
+  }
+  addFavoriteSong(song: MusicItem, user) {
+    const userRef: AngularFirestoreCollection<Object> = this.afs.collection(`users/${user.uid}/favoriteSongs/`);
+    console.log('added' + song.track);
+    return userRef.add(song as object);
+  }
+  addFavoriteArtist(artist: MusicItem, user) {
+    const userRef: AngularFirestoreCollection<Object> = this.afs.collection(`users/${user.uid}/favoriteArtists/`);
+    console.log('added' + artist.artist);
+    return userRef.add(artist as object);
   }
   private oAuthLogin(provider) {
     return this.afAuth.auth.signInWithPopup(provider)
@@ -32,20 +58,17 @@ export class UserService {
       });
   }
   private updateUserData(user) {
-    const userRef: AngularFirestoreDocument<User> = this.afs.doc(`users/${user.uid}`);
 
+    const userRef: AngularFirestoreDocument<User> = this.afs.doc(`users/${user.uid}`);
 
     const data: User = {
       uid: user.uid,
       email: user.email,
-      // favoriteAlbums: user.favoriteAlbums,
-      // favoriteSongs: user.favoriteSongs,
-      // favoriteArtists: user.favoriteArtists
     };
 
-    return userRef.set(data, {merge: true});
+    return userRef.set(data);
   }
-  logout(){
+  logout() {
     this.afAuth.auth.signOut();
   }
 }

@@ -13,10 +13,13 @@
   <button mat-raised-button="Search" (click)="search()">Search</button>
 
 
-<mat-card *ngFor="let result of results">
+<mat-card *ngFor="let result of results" (click)="add(result)">
   <mat-card-header>
     <mat-card-title>
-      {{result.name}}
+      {{result.track}}
+      {{result.album}}
+      {{result.artist}}
+      <a href="{{result.description}}">More information</a>
       <button mat-icon-button class="more-button" [matMenuTriggerFor]="menu" aria-label="Toggle menu">
         <mat-icon>more_vert</mat-icon>
       </button>

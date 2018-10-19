@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import {UserService} from '../../authentication/user.service';
+import {MusicItem} from '../../models/musicItem';
 
 @Component({
   selector: 'app-favorite-albums',
@@ -6,10 +8,15 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./favorite-albums.component.css']
 })
 export class FavoriteAlbumsComponent implements OnInit {
-
-  constructor() { }
+  favoriteAlbums: Array<MusicItem>;
+  constructor(private userService: UserService) { }
 
   ngOnInit() {
+    this.userService.user.subscribe(res => {
+       this.userService.getFavoriteAlbums(res).subscribe(rez => {
+         this.favoriteAlbums = rez;
+      });
+    });
   }
 
 }
